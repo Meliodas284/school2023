@@ -40,4 +40,24 @@ public class Money
 	/// Количество копеек
 	/// </summary>
 	public int Kopeks { get; }
+
+	/// <summary>
+	/// Перегрузка оператора сложения
+	/// </summary>
+	/// <param name="money1">Левый операнд</param>
+	/// <param name="money2">Правый операнд</param>
+	/// <returns>Новый объект с суммой двух входных денежных сумм</returns>
+	public static Money operator +(Money money1, Money money2)
+	{
+		var totalKopeks = (money1.IsNegative ? -1 : 1) * (money1.Rubles * 100 + money1.Kopeks) +
+					  (money2.IsNegative ? -1 : 1) * (money2.Rubles * 100 + money2.Kopeks);
+
+		var isNegative = totalKopeks < 0;
+		totalKopeks = Math.Abs(totalKopeks);
+
+		var rubles = totalKopeks / 100;
+		var kopeks = totalKopeks % 100;
+
+		return new Money(isNegative, rubles, kopeks);
+	}
 }
