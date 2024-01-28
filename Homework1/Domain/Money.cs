@@ -80,6 +80,27 @@ public class Money
 
 		return new Money(isNegative, rubles, kopeks);
 	}
+
+	public static bool operator >(Money money1, Money money2)
+	{
+		return money1.CompareTo(money2) > 0;
+	}
+
+	public static bool operator <(Money money1, Money money2)
+	{
+		return money1.CompareTo(money2) < 0;
+	}
+
+	public static bool operator >=(Money money1, Money money2)
+	{
+		return money1.CompareTo(money2) >= 0;
+	}
+
+	public static bool operator <=(Money money1, Money money2)
+	{
+		return money1.CompareTo(money2) <= 0;
+	}
+
 	/// <summary>
 	/// Проверяет, равен ли указанный объект текущему
 	/// </summary>
