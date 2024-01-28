@@ -80,4 +80,28 @@ public class Money
 
 		return new Money(isNegative, rubles, kopeks);
 	}
+	/// <summary>
+	/// Проверяет, равен ли указанный объект текущему
+	/// </summary>
+	/// <param name="obj">Объект для сравнения</param>
+	/// <returns>true: объекты равны; false: объекты не равны</returns>
+	public override bool Equals(object? obj)
+	{
+		if (obj is not Money other)
+			return false;
+
+		return IsNegative == other.IsNegative &&
+			   Rubles == other.Rubles &&
+			   Kopeks == other.Kopeks;
+	}
+
+	public override int GetHashCode()
+	{
+		return HashCode.Combine(Rubles, Kopeks);	
+	}
+
+	public override string ToString()
+	{
+		return $"{(IsNegative ? "-" : "")}{Rubles}.{Kopeks}";
+	}
 }
