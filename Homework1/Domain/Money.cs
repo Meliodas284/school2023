@@ -12,6 +12,15 @@ public class Money
 
 	public Money(bool isNegative, int rubles, int kopeks)
 	{
+		if (kopeks is < 0 or > 99) 
+			throw new ArgumentException("Количество копеек не должно быть отрицательным или больше 99");
+
+		if (rubles < 0) 
+			throw new ArgumentException("Количество рублей не может быть отрицательным");
+
+		if (isNegative && rubles == 0 && kopeks == 0)
+			throw new ArgumentException("Денежная сумма не может быть отрицательной и равна нулю");
+
 		IsNegative = isNegative;
 		Rubles = rubles;
 		Kopeks = kopeks;
