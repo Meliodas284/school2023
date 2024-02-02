@@ -2,40 +2,94 @@
 
 public class AccountProcessor
 {
-	public decimal CalculatePerformed(IBankAccount bankAccount)
+	public decimal CalculatePerformed(in BankAccount bankAccount)
 	{
-		return CalculateOperationPerformed(bankAccount.LastOperation) +
-			   CalculateOperationPerformed(bankAccount.PreviousOperation) +
-			   CalculateOperationPerformed1(bankAccount.LastOperation) +
-			   CalculateOperationPerformed1(bankAccount.PreviousOperation) +
-			   CalculateOperationPerformed2(bankAccount.LastOperation) +
-			   CalculateOperationPerformed2(bankAccount.PreviousOperation) +
-			   CalculateOperation3(bankAccount.LastOperation) +
-			   CalculateOperation3(bankAccount.PreviousOperation) +
-			   CalculateOperation3(bankAccount)
+		return CalculateLastOperationPerformed(in bankAccount) +
+			   CalculatePreviousOperationPerformed(in bankAccount) +
+			   CalculateLastOperationPerformed1(in bankAccount) +
+			   CalculatePreviousOperationPerformed1(in bankAccount) +
+			   CalculateLastOperationPerformed2(in bankAccount) +
+			   CalculatePreviousOperationPerformed2(in bankAccount) +
+			   CalculateLastOperationPerformed3(in bankAccount) +
+			   CalculatePreviousOperationPerformed3(in bankAccount) +
+			   CalculateAccountOperationPerformed3(in bankAccount)
 			   +
-			   CalculateOperationPerformed(bankAccount.LastOperation) +
-			   CalculateOperationPerformed(bankAccount.PreviousOperation) +
-			   CalculateOperationPerformed1(bankAccount.LastOperation) +
-			   CalculateOperationPerformed1(bankAccount.PreviousOperation) +
-			   CalculateOperationPerformed2(bankAccount.LastOperation) +
-			   CalculateOperationPerformed2(bankAccount.PreviousOperation) +
-			   CalculateOperation3(bankAccount.LastOperation) +
-			   CalculateOperation3(bankAccount.PreviousOperation) +
-			   CalculateOperation3(bankAccount)
+			   CalculateLastOperationPerformed(in bankAccount) +
+			   CalculatePreviousOperationPerformed(in bankAccount) +
+			   CalculateLastOperationPerformed1(in bankAccount) +
+			   CalculatePreviousOperationPerformed1(in bankAccount) +
+			   CalculateLastOperationPerformed2(in bankAccount) +
+			   CalculatePreviousOperationPerformed2(in bankAccount) +
+			   CalculateLastOperationPerformed3(in bankAccount) +
+			   CalculatePreviousOperationPerformed3(in bankAccount) +
+			   CalculateAccountOperationPerformed3(in bankAccount)
 			   +
-			   CalculateOperationPerformed(bankAccount.LastOperation) +
-			   CalculateOperationPerformed(bankAccount.PreviousOperation) +
-			   CalculateOperationPerformed1(bankAccount.LastOperation) +
-			   CalculateOperationPerformed1(bankAccount.PreviousOperation) +
-			   CalculateOperationPerformed2(bankAccount.LastOperation) +
-			   CalculateOperationPerformed2(bankAccount.PreviousOperation) +
-			   CalculateOperation3(bankAccount.LastOperation) +
-			   CalculateOperation3(bankAccount.PreviousOperation) +
-			   CalculateOperation3(bankAccount);
+			   CalculateLastOperationPerformed(in bankAccount) +
+			   CalculatePreviousOperationPerformed(in bankAccount) +
+			   CalculateLastOperationPerformed1(in bankAccount) +
+			   CalculatePreviousOperationPerformed1(in bankAccount) +
+			   CalculateLastOperationPerformed2(in bankAccount) +
+			   CalculatePreviousOperationPerformed2(in bankAccount) +
+			   CalculateLastOperationPerformed3(in bankAccount) +
+			   CalculatePreviousOperationPerformed3(in bankAccount) +
+			   CalculateAccountOperationPerformed3(in bankAccount);
 	}
 
-	public decimal Calculate(in BankAccount bankAccount)
+	private decimal CalculateLastOperationPerformed(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.LastOperation.OperationInfo0;
+	}
+
+	private decimal CalculatePreviousOperationPerformed(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.PreviousOperation.OperationInfo0;
+	}
+
+	private decimal CalculateLastOperationPerformed1(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.LastOperation.OperationInfo1;
+	}
+
+	private decimal CalculatePreviousOperationPerformed1(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.PreviousOperation.OperationInfo1;
+	}
+
+	private decimal CalculateLastOperationPerformed2(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.LastOperation.OperationInfo2;
+	}
+
+	private decimal CalculatePreviousOperationPerformed2(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.PreviousOperation.OperationInfo2;
+	}
+
+	private decimal CalculateLastOperationPerformed3(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.LastOperation.TotalAmount;
+	}
+
+	private decimal CalculatePreviousOperationPerformed3(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.PreviousOperation.TotalAmount;
+	}
+
+	private decimal CalculateAccountOperationPerformed3(in BankAccount bankAccount)
+	{
+		// Some calculation code
+		return bankAccount.TotalAmount;
+	}
+
+	public decimal Calculate(BankAccount bankAccount)
 	{
 		return CalculateOperation(bankAccount.LastOperation) +
 		       CalculateOperation(bankAccount.PreviousOperation) +
@@ -74,19 +128,7 @@ public class AccountProcessor
 		return bankOperation.OperationInfo0;
 	}
 
-	private decimal CalculateOperationPerformed(in IBankOperation bankOperation)
-	{
-		// Some calculation code
-		return bankOperation.OperationInfo0;
-	}
-
 	private decimal CalculateOperation1(BankOperation bankOperation)
-	{
-		// Some calculation code
-		return bankOperation.OperationInfo1;
-	}
-
-	private decimal CalculateOperationPerformed1(in IBankOperation bankOperation)
 	{
 		// Some calculation code
 		return bankOperation.OperationInfo1;
@@ -98,39 +140,27 @@ public class AccountProcessor
 		return bankOperation.OperationInfo2;
 	}
 
-	private decimal CalculateOperationPerformed2(in IBankOperation bankOperation)
-	{
-		// Some calculation code
-		return bankOperation.OperationInfo2;
-	}
-
 	private decimal CalculateOperation3(ITotalAmount bankOperation)
 	{
 		// Some calculation code
 		return bankOperation.TotalAmount;
 	}
-
-	private decimal CalculateOperationPerformed3(in ITotalAmount bankOperation)
-	{
-		// Some calculation code
-		return bankOperation.TotalAmount;
-	}
 }
 
-public interface IBankAccount : ITotalAmount
-{
-	public BankOperation LastOperation { get; set; }
-	public BankOperation PreviousOperation { get; set; }
-}
+//public interface IBankAccount : ITotalAmount
+//{
+//	public BankOperation LastOperation { get; set; }
+//	public BankOperation PreviousOperation { get; set; }
+//}
 
-public interface IBankOperation : ITotalAmount
-{
-	public long OperationInfo0 { get; set; }
-	public long OperationInfo1 { get; set; }
-	public long OperationInfo2 { get; set; }
-}
+//public interface IBankOperation : ITotalAmount
+//{
+//	public long OperationInfo0 { get; set; }
+//	public long OperationInfo1 { get; set; }
+//	public long OperationInfo2 { get; set; }
+//}
 
-public struct BankAccount : IBankAccount
+public struct BankAccount : ITotalAmount
 {
 	public decimal TotalAmount { get; set; }
 	public BankOperation LastOperation { get; set; }
@@ -142,7 +172,7 @@ public interface ITotalAmount
 	decimal TotalAmount { get; set; }
 }
 
-public struct BankOperation : IBankOperation
+public struct BankOperation : ITotalAmount
 {
 	public decimal TotalAmount { get; set; }
 

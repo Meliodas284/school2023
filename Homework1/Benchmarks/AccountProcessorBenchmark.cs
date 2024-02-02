@@ -21,6 +21,6 @@ public class AccountProcessorBenchmark
 	[Benchmark]
 	public void CalculatePerformed()
 	{
-		_processor.CalculatePerformed(_account);
+		_processor.CalculatePerformed(in _account);
 	}
 }
