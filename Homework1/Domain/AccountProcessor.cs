@@ -147,19 +147,6 @@ public class AccountProcessor
 	}
 }
 
-//public interface IBankAccount : ITotalAmount
-//{
-//	public BankOperation LastOperation { get; set; }
-//	public BankOperation PreviousOperation { get; set; }
-//}
-
-//public interface IBankOperation : ITotalAmount
-//{
-//	public long OperationInfo0 { get; set; }
-//	public long OperationInfo1 { get; set; }
-//	public long OperationInfo2 { get; set; }
-//}
-
 public struct BankAccount : ITotalAmount
 {
 	public decimal TotalAmount { get; set; }
