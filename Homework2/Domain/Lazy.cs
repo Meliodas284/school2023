@@ -5,7 +5,12 @@
 /// </summary>
 public class Lazy<TValue>
 {
-	// TODO Реализовать ленивое получение значение при первом обращении к Value
+	private readonly System.Lazy<TValue> _lazy;
 
-	public TValue? Value { get; }
+	public Lazy(Func<TValue> func)
+    {
+        _lazy = new System.Lazy<TValue>(func);
+    }
+
+	public TValue? Value => _lazy.Value;
 }
