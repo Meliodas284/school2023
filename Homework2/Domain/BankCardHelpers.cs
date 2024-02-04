@@ -11,7 +11,7 @@ public static class BankCardHelpers
 	/// <returns>Номер карты без маски</returns>
 	public static string GetUnmaskedCardNumber(BankCard card)
 	{
-		var unmaskField = typeof(BankCard).GetField("_name", BindingFlags.Instance | BindingFlags.NonPublic);
+		var unmaskField = typeof(BankCard).GetField("_number", BindingFlags.Instance | BindingFlags.NonPublic);
 
 		if (unmaskField == null)
 			return string.Empty;
