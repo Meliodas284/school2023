@@ -14,13 +14,29 @@ public static class AssemblyHelpers
 	/// <returns>Список типов с количеством наследников</returns>
 	public static (string BaseTypeName, int InheritorCount)[] GetTypesWithInheritors()
 	{
+		// Необходимое пространство имен для поиска
+		var necessaryNamespace = "Fuse8_ByteMinds.SummerSchool.Domain";
+
+		var baseTypeList = new List<Type>();
+
 		// Получаем все классы из текущей Assembly
 		var assemblyClassTypes = Assembly.GetAssembly(typeof(AssemblyHelpers))
 			!.DefinedTypes
-			.Where(p => p.IsClass);
+			.Where(p => p.IsClass && !p.IsAbstract && p.Namespace == necessaryNamespace);
 
-		// TODO Добавить реализацию
-		throw new NotImplementedException();
+		foreach (var classType in assemblyClassTypes)
+		{
+			var baseType = GetBaseType(classType);
+			if (baseType == null || baseType.Namespace != necessaryNamespace)
+				continue;
+
+			baseTypeList.Add(baseType);
+		}
+
+		return baseTypeList
+			.GroupBy(p => p.Name)
+			.Select(p => (p.Key, p.Count()))
+			.ToArray();
 	}
 
 	/// <summary>

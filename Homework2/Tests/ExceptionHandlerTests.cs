@@ -50,11 +50,11 @@ public class ExceptionHandlerTests
 		Assert.Equal("BadRequest", errorMessage);
 	}
 
-	[Fact(DisplayName = "При возникновении HttpRequestException, у которого StatusCode=404, возвращает значение 'Ресурс не райден'")]
+	[Fact(DisplayName = "При возникновении HttpRequestException, у которого StatusCode=404, возвращает значение 'Ресурс не найден'")]
 	public void HttpRequestExceptionNotFoundMessage()
 	{
 		var errorMessage = ExceptionHandler.Handle(() => throw CreateHttpRequestException(HttpStatusCode.NotFound));
-		Assert.Equal("Ресурс не райден", errorMessage);
+		Assert.Equal("Ресурс не найден", errorMessage);
 	}
 
 	private static HttpRequestException CreateHttpRequestException(HttpStatusCode statusCode) => new("Произошла ошибка http-запроса", null, statusCode);
