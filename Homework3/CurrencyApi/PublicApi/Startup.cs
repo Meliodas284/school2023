@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using Microsoft.OpenApi.Models;
+using Serilog;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace Fuse8_ByteMinds.SummerSchool.PublicApi;
@@ -27,7 +29,18 @@ public class Startup
 				});
 
 		services.AddEndpointsApiExplorer();
-		services.AddSwaggerGen();
+		services.AddSwaggerGen(options =>
+		{
+			options.SwaggerDoc("v1", new OpenApiInfo
+			{
+				Version = "v1",
+				Title = "Currency API",
+				Description = "An ASP.NET Core Web API for currency",
+			});
+
+			var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+			options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+		});
 
 		services.AddSerilog(loggerConfig =>
 			loggerConfig.ReadFrom.Configuration(_configuration));
