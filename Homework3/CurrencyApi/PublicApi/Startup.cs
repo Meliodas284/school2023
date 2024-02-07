@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Serilog;
+using System.Text.Json.Serialization;
 
 namespace Fuse8_ByteMinds.SummerSchool.PublicApi;
 
@@ -21,12 +22,15 @@ public class Startup
 				{
 					// Добавляем конвертер для енама
 					// По умолчанию енам преобразуется в цифровое значение
-					// Этим конвертером задаем перевод в строковое занчение
+					// Этим конвертером задаем перевод в строковое значение
 					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				});
-		;
+
 		services.AddEndpointsApiExplorer();
 		services.AddSwaggerGen();
+
+		services.AddSerilog(loggerConfig =>
+			loggerConfig.ReadFrom.Configuration(_configuration));
 	}
 
 	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,7 +41,10 @@ public class Startup
 			app.UseSwaggerUI();
 		}
 
-		app.UseRouting()
-			.UseEndpoints(endpoints => endpoints.MapControllers());
+		app.UseRouting();
+
+		app.UseSerilogRequestLogging();
+
+		app.UseEndpoints(endpoints => endpoints.MapControllers());
 	}
 }
