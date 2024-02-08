@@ -46,3 +46,19 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 			throw new Exception(response.StatusCode.ToString());
 		}
 
+		/// <summary>
+		/// Проверяет превышение лимита запросов, вызывает исключение если превышен
+		/// </summary>
+		/// <exception cref="ApiRequestLimitException">Исключение при превышении лимита</exception>
+		private async Task CheckRequestsLimit()
+		{
+			var client = _factory.CreateClient("currency");
+
+			var accountStatus = await client
+				.GetFromJsonAsync<AccountStatusDto>("status");
+
+			if (accountStatus!.Quotas.Month.Remaining == 0)
+				throw new ApiRequestLimitException();
+		}
+	}
+}
