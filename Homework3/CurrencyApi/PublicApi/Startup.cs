@@ -1,4 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
+﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
 using System.Text.Json.Serialization;
