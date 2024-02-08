@@ -44,6 +44,7 @@ public class Startup
 
 		services.AddSerilog(loggerConfig =>
 			loggerConfig.ReadFrom.Configuration(_configuration));
+		services.Configure<CurrencyAPIOptions>(_configuration.GetSection("CurrencyAPIOptions"));
 	}
 
 	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
