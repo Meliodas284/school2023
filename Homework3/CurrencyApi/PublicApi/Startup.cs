@@ -1,5 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 ﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
+using Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
@@ -46,7 +47,16 @@ public class Startup
 
 		services.AddSerilog(loggerConfig =>
 			loggerConfig.ReadFrom.Configuration(_configuration));
+
+		services.AddHttpClient("currency", client =>
+		{
+			client.DefaultRequestHeaders.Add("apikey", _configuration["API-KEY"]);
+			client.BaseAddress = new Uri(_configuration["CurrencyAPIOptions:BaseUrl"]!);
+		});
+
 		services.Configure<CurrencyAPIOptions>(_configuration.GetSection("CurrencyAPIOptions"));
+
+		services.AddScoped<ICurrencyService, CurrencyService>();
 	}
 
 	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
