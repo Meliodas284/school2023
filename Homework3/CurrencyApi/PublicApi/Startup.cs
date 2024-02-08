@@ -1,4 +1,3 @@
-﻿using Microsoft.OpenApi.Models;
 ﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService;
 using Microsoft.OpenApi.Models;
@@ -8,15 +7,26 @@ using System.Text.Json.Serialization;
 
 namespace Fuse8_ByteMinds.SummerSchool.PublicApi;
 
+/// <summary>
+/// Класс настраивает конфигурацию приложения
+/// </summary>
 public class Startup
 {
 	private readonly IConfiguration _configuration;
 
+	/// <summary>
+	/// Конструктор инициализирует внедренные зависимости
+	/// </summary>
+	/// <param name="configuration">Сервис конфигурации</param>
 	public Startup(IConfiguration configuration)
 	{
 		_configuration = configuration;
 	}
 
+	/// <summary>
+	/// Добавляет сервисы приложения
+	/// </summary>
+	/// <param name="services">Коллекция сервисов</param>
 	public void ConfigureServices(IServiceCollection services)
 	{
 		services.AddControllers()
@@ -59,6 +69,11 @@ public class Startup
 		services.AddScoped<ICurrencyService, CurrencyService>();
 	}
 
+	/// <summary>
+	/// Конфигурация middleware компонентов
+	/// </summary>
+	/// <param name="app">Builder приложения для конфигурации</param>
+	/// <param name="env">Информация о среде веб-хостинга</param>
 	public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 	{
 		if (env.IsDevelopment())
