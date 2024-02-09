@@ -28,7 +28,7 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// Получить курс валюты по умолчанию
 		/// </summary>
 		/// <returns>Информация о валюте <see cref="Currency"/></returns>
-		public async Task<Currency?> GetCurrency()
+		public async Task<Currency> GetCurrency()
 		{
 			await CheckRequestsLimit();
 
@@ -37,13 +37,12 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 
 			var response = await client.GetAsync(uri);
 
-			if (response.IsSuccessStatusCode)
+			if (!response.IsSuccessStatusCode)
 			{
-				var result = await response.Content.ReadFromJsonAsync<ExternalApiResponseDto>();
-				return result!.Data[_options.DefaultCurrency];
+				throw new Exception(response.StatusCode.ToString());
 			}
 
-			throw new Exception(response.StatusCode.ToString());
+			return await ParseCurrency(response, _options.DefaultCurrency);
 		}
 
 		/// <summary>

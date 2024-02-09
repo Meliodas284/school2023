@@ -11,6 +11,6 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// Получить курс валюты по умолчанию
 		/// </summary>
 		/// <returns>Информация о валюте <see cref="Currency"/></returns>
-		Task<Currency?> GetCurrency();
+		Task<Currency> GetCurrency();
 	}
 }
