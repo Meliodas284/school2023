@@ -60,5 +60,20 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 			if (accountStatus!.Quotas.Month.Remaining == 0)
 				throw new ApiRequestLimitException();
 		}
+
+		/// <summary>
+		/// Получает нужную валюту из ответа внешнего API по коду
+		/// </summary>
+		/// <param name="response">Ответ внешнего API</param>
+		/// <param name="code">Код нужной валюты</param>
+		/// <returns>Нужная валюта с кодом <see cref="Currency.Code"/></returns>
+		private async Task<Currency> ParseCurrency(HttpResponseMessage response, string code)
+		{
+			var result = await response.Content.ReadFromJsonAsync<ExternalApiResponseDto>();
+			var currency = result!.Data[code];
+			currency.Value = Math.Round(currency.Value, _options.DefaultRate);
+
+			return currency;
+		}
 	}
 }
