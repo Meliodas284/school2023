@@ -1,4 +1,5 @@
-﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
+﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Exceptions;
+using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -29,7 +30,10 @@ public class Startup
 	/// <param name="services">Коллекция сервисов</param>
 	public void ConfigureServices(IServiceCollection services)
 	{
-		services.AddControllers()
+		services.AddControllers(options =>
+		{
+			options.Filters.Add<GlobalExceptionFilter>();
+		})
 
 			// Добавляем глобальные настройки для преобразования Json
 			.AddJsonOptions(
@@ -54,7 +58,7 @@ public class Startup
 			var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
 			options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 		});
-
+		
 		services.AddSerilog(loggerConfig =>
 			loggerConfig.ReadFrom.Configuration(_configuration));
 
