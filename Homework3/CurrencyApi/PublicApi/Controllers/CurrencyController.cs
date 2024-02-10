@@ -1,4 +1,5 @@
 ﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
+using Fuse8_ByteMinds.SummerSchool.PublicApi.Models.Dtos;
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,6 +43,20 @@ public class CurrencyController : ControllerBase
 	public async Task<ActionResult<Currency>> GetCurrencyByCode(string code)
 	{
 		var result = await _currencyService.GetCurrencyByCode(code);
+		return Ok(result);
+	}
+
+	/// <summary>
+	/// Получить курс валюты по коду и дате
+	/// </summary>
+	/// <param name="date">Дата курса</param>
+	/// <param name="code">Код валюты</param>
+	/// <returns>Информацию о валюте с нужным кодом
+	/// и на определенную дату<see cref="Currency"/></returns>
+	[HttpGet("{date:datetime}/{code:regex([[A-Z]]{{3}})}")]
+	public async Task<ActionResult<DateCurrencyDto>> GetCurrencyOnDate(DateOnly date, string code)
+	{
+		var result = await _currencyService.GetCurrencyOnDate(date, code);
 		return Ok(result);
 	}
 }

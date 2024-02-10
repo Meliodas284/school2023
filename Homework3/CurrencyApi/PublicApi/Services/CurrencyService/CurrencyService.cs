@@ -64,6 +64,36 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 
 			return await ParseCurrency(response, code);
 		}
+
+		/// <summary>
+		/// Получить курс валюты по коду и дате
+		/// </summary>
+		/// <param name="date">Дата курса</param>
+		/// <param name="code">Код валюты</param>
+		/// <returns>Информацию о валюте с нужным кодом
+		/// и на определенную дату<see cref="Currency"/></returns>
+		/// <exception cref="CurrencyNotFoundException">При некорректном коде валюты</exception>
+		public async Task<DateCurrencyDto> GetCurrencyOnDate(DateOnly date, string code)
+		{
+			await CheckRequestsLimit();
+			
+			var client = _factory.CreateClient("currency");
+			var uri = $"historical?currencies={code}&date={date.ToString("yyyy-MM-dd")}&base_currency={_options.BaseCurrency}";
+
+			var response = await client.GetAsync(uri);
+
+			if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
+				throw new CurrencyNotFoundException();
+
+			var currency = await ParseCurrency(response, code);
+
+			return new DateCurrencyDto 
+			{
+				Code = currency.Code, 
+				Value = currency.Value, 
+				Date = date 
+			};
+		}
 		/// <summary>
 		/// Проверяет превышение лимита запросов, вызывает исключение если превышен
 		/// </summary>
