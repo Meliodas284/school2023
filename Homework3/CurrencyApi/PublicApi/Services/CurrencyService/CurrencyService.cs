@@ -46,6 +46,26 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		}
 
 		/// <summary>
+		/// Получить курс валюты по нужному коду
+		/// </summary>
+		/// <param name="code">Код валюты</param>
+		/// <returns>Информацию о валюте по нужному коду <see cref="Currency"/></returns>
+		/// <exception cref="CurrencyNotFoundException">При некорректном коде валюты</exception>
+		public async Task<Currency> GetCurrencyByCode(string code)
+		{
+			await CheckRequestsLimit();
+			
+			var client = _factory.CreateClient("currency");
+			var uri = $"latest?currencies={code}&base_currency={_options.BaseCurrency}";
+
+			var response = await client.GetAsync(uri);
+
+			if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
+				throw new CurrencyNotFoundException();
+
+			return await ParseCurrency(response, code);
+		}
+		/// <summary>
 		/// Проверяет превышение лимита запросов, вызывает исключение если превышен
 		/// </summary>
 		/// <exception cref="ApiRequestLimitException">Исключение при превышении лимита</exception>

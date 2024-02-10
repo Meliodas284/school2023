@@ -32,4 +32,16 @@ public class CurrencyController : ControllerBase
 		var result = await _currencyService.GetCurrency();
 		return Ok(result);
 	}
+
+	/// <summary>
+	/// Получить курс валюты по коду
+	/// </summary>
+	/// <param name="code">Код валюты</param>
+	/// <returns>Информация о валюте по нужному коду <see cref="Currency"/></returns>
+	[HttpGet("{code:regex([[A-Z]]{{3}})}")]
+	public async Task<ActionResult<Currency>> GetCurrencyByCode(string code)
+	{
+		var result = await _currencyService.GetCurrencyByCode(code);
+		return Ok(result);
+	}
 }
