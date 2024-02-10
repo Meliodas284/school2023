@@ -27,7 +27,7 @@ public class CurrencyController : ControllerBase
 	/// </summary>
 	/// <returns>Информация о валюте <see cref="Currency"/></returns>
 	[HttpGet]
-	public async Task<ActionResult<Currency?>> GetCurrency()
+	public async Task<ActionResult<Currency>> GetCurrency()
 	{
 		var result = await _currencyService.GetCurrency();
 		return Ok(result);
