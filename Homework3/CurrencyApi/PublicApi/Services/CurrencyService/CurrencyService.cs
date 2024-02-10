@@ -2,6 +2,7 @@
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Models.Dtos;
 using Microsoft.Extensions.Options;
+using System.Net;
 
 namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 {
@@ -94,6 +95,28 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 				Date = date 
 			};
 		}
+
+		/// <summary>
+		/// Получить настройки API
+		/// </summary>
+		/// <returns>Информацию о настройках API</returns>
+		public async Task<ApiSettings> GetSettings()
+		{
+			var client = _factory.CreateClient("currency");
+
+			var accountStatus = await client
+				.GetFromJsonAsync<AccountStatusDto>("status");
+
+			return new ApiSettings
+			{
+				DefaultCurrency = _options.DefaultCurrency,
+				BaseCurrency = _options.BaseCurrency,
+				RequestLimit = accountStatus!.Quotas.Month.Total,
+				RequestCount = accountStatus.Quotas.Month.Used,
+				CurrencyRoundCount = _options.DefaultRate
+			};
+		}
+
 		/// <summary>
 		/// Проверяет превышение лимита запросов, вызывает исключение если превышен
 		/// </summary>

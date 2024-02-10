@@ -59,4 +59,15 @@ public class CurrencyController : ControllerBase
 		var result = await _currencyService.GetCurrencyOnDate(date, code);
 		return Ok(result);
 	}
+
+	/// <summary>
+	/// Получить информацию о настройках API
+	/// </summary>
+	/// <returns>Информацию о настройках API <see cref="ApiSettings"/></returns>
+	[HttpGet("settings")]
+	public async Task<ActionResult<ApiSettings>> GetSettings()
+	{
+		var result = await _currencyService.GetSettings();
+		return Ok(result);
+	}
 }

@@ -29,5 +29,11 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// <returns>Информацию о валюте с нужным кодом
 		/// и на определенную дату<see cref="Currency"/></returns>
 		Task<DateCurrencyDto> GetCurrencyOnDate(DateOnly date, string code);
+
+		/// <summary>
+		/// Получить настройки API
+		/// </summary>
+		/// <returns>Информацию об API</returns>
+		Task<ApiSettings> GetSettings();
 	}
 }
