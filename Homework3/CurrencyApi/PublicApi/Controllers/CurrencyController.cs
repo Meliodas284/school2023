@@ -63,9 +63,9 @@ public class CurrencyController : ControllerBase
 	/// <summary>
 	/// Получить информацию о настройках API
 	/// </summary>
-	/// <returns>Информацию о настройках API <see cref="ApiSettings"/></returns>
+	/// <returns>Информацию о настройках API <see cref="ApiSettingsDto"/></returns>
 	[HttpGet("settings")]
-	public async Task<ActionResult<ApiSettings>> GetSettings()
+	public async Task<ActionResult<ApiSettingsDto>> GetSettings()
 	{
 		var result = await _currencyService.GetSettings();
 		return Ok(result);

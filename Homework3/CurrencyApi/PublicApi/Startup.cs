@@ -79,7 +79,7 @@ public class Startup
 			.IncludeResponseHeaders()
 			.IncludeResponseBody());
 
-		services.Configure<CurrencyAPIOptions>(_configuration.GetSection("CurrencyAPIOptions"));
+		services.Configure<CurrencyApiOptions>(_configuration.GetSection("CurrencyAPIOptions"));
 
 		services.AddScoped<ICurrencyService, CurrencyService>();
 	}

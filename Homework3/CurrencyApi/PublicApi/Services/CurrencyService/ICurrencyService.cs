@@ -3,10 +3,10 @@ using Fuse8_ByteMinds.SummerSchool.PublicApi.Models.Dtos;
 
 namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 {
-	/// <summary>
-	/// Предоставляет методы для получения курса валют
-	/// </summary>
-	public interface ICurrencyService
+    /// <summary>
+    /// Предоставляет методы для получения курса валют
+    /// </summary>
+    public interface ICurrencyService
 	{
 		/// <summary>
 		/// Получить курс валюты по умолчанию
@@ -34,6 +34,6 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// Получить настройки API
 		/// </summary>
 		/// <returns>Информацию об API</returns>
-		Task<ApiSettings> GetSettings();
+		Task<ApiSettingsDto> GetSettings();
 	}
 }

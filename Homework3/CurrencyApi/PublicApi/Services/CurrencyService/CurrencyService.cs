@@ -11,7 +11,7 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
     /// </summary>
     public class CurrencyService : ICurrencyService
 	{
-		private readonly CurrencyAPIOptions _options;
+		private readonly CurrencyApiOptions _options;
 		private readonly IHttpClientFactory _factory;
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// <param name="options">Конфигурация api</param>
 		/// <param name="factory">Сервис для создания http клиента</param>
 		public CurrencyService(
-			IOptionsSnapshot<CurrencyAPIOptions> options, 
+			IOptionsSnapshot<CurrencyApiOptions> options, 
 			IHttpClientFactory factory)
         {
             _options = options.Value;
@@ -102,14 +102,14 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// Получить настройки API
 		/// </summary>
 		/// <returns>Информацию о настройках API</returns>
-		public async Task<ApiSettings> GetSettings()
+		public async Task<ApiSettingsDto> GetSettings()
 		{
 			var client = _factory.CreateClient("currency");
 
 			var accountStatus = await client
 				.GetFromJsonAsync<AccountStatusDto>("status");
 
-			return new ApiSettings
+			return new ApiSettingsDto
 			{
 				DefaultCurrency = _options.DefaultCurrency,
 				BaseCurrency = _options.BaseCurrency,
