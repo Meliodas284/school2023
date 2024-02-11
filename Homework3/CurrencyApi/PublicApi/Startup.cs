@@ -1,4 +1,6 @@
-﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Exceptions;
+﻿using Audit.Core;
+using Audit.Http;
+using Fuse8_ByteMinds.SummerSchool.PublicApi.Exceptions;
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService;
 using Microsoft.OpenApi.Models;
@@ -62,11 +64,20 @@ public class Startup
 		services.AddSerilog(loggerConfig =>
 			loggerConfig.ReadFrom.Configuration(_configuration));
 
+		Audit.Core.Configuration.Setup()
+			.UseSerilog();
+
 		services.AddHttpClient("currency", client =>
 		{
 			client.DefaultRequestHeaders.Add("apikey", _configuration["API-KEY"]);
 			client.BaseAddress = new Uri(_configuration["CurrencyAPIOptions:BaseUrl"]!);
-		});
+		})
+		.AddAuditHandler(audit => audit
+			.IncludeRequestBody()
+			.IncludeRequestHeaders()
+			.IncludeContentHeaders()
+			.IncludeResponseHeaders()
+			.IncludeResponseBody());
 
 		services.Configure<CurrencyAPIOptions>(_configuration.GetSection("CurrencyAPIOptions"));
 
