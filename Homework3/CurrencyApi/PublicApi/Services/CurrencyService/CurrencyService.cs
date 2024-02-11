@@ -113,7 +113,7 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 				BaseCurrency = _options.BaseCurrency,
 				RequestLimit = accountStatus!.Quotas.Month.Total,
 				RequestCount = accountStatus.Quotas.Month.Used,
-				CurrencyRoundCount = _options.DefaultRate
+				CurrencyRoundCount = _options.CurrencyRoundCount
 			};
 		}
 
@@ -142,7 +142,7 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		{
 			var result = await response.Content.ReadFromJsonAsync<ExternalApiResponseDto>();
 			var currency = result!.Data[code];
-			currency.Value = Math.Round(currency.Value, _options.DefaultRate);
+			currency.Value = Math.Round(currency.Value, _options.CurrencyRoundCount);
 
 			return currency;
 		}

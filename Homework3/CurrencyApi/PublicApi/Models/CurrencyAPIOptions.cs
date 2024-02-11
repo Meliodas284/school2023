@@ -23,6 +23,6 @@
 		/// <summary>
 		/// Значение округления курса по умолчанию
 		/// </summary>
-		public int DefaultRate { get; init; }
+		public int CurrencyRoundCount { get; init; }
     }
 }
