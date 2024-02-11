@@ -19,7 +19,9 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// </summary>
 		/// <param name="options">Конфигурация api</param>
 		/// <param name="factory">Сервис для создания http клиента</param>
-		public CurrencyService(IOptions<CurrencyAPIOptions> options, IHttpClientFactory factory)
+		public CurrencyService(
+			IOptionsSnapshot<CurrencyAPIOptions> options, 
+			IHttpClientFactory factory)
         {
             _options = options.Value;
 			_factory = factory;
