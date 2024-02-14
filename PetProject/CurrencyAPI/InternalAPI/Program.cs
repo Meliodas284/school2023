@@ -1,3 +1,9 @@
+using InternalApi.Services.CurrencyService;
+using InternalAPI.Models;
+using Microsoft.OpenApi.Models;
+using Serilog;
+using System.Reflection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,7 +11,32 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+	options.SwaggerDoc("v1", new OpenApiInfo
+	{
+		Version = "v1",
+		Title = "Currency API",
+		Description = "An ASP.NET Core Web API for currency",
+	});
+
+	var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+	options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
+
+builder.Services.AddSerilog(loggerConfig =>
+	loggerConfig.ReadFrom.Configuration(builder.Configuration));
+
+builder.Services.AddHttpClient("currency", client =>
+{
+	client.DefaultRequestHeaders.Add("apikey", builder.Configuration["API-KEY"]);
+	client.BaseAddress = new Uri(builder.Configuration["CurrencyAPIOptions:BaseUrl"]!);
+});
+
+builder.Services.Configure<CurrencyApiOptions>(builder
+	.Configuration.GetSection("CurrencyAPIOptions"));
+
+builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 
 var app = builder.Build();
 
@@ -17,6 +48,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSerilogRequestLogging();
 
 app.UseAuthorization();
 
