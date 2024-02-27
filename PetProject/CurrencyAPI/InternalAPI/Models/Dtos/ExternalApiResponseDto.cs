@@ -1,4 +1,6 @@
-﻿namespace InternalApi.Models.Dtos
+﻿using System.Text.Json.Serialization;
+
+namespace InternalApi.Models.Dtos
 {
     /// <summary>
     /// Класс представляющий ответ внешнего API
@@ -21,9 +23,10 @@
     /// </summary>
     public class MetaDto
     {
-		/// <summary>
-		/// Дата обновления данных
-		/// </summary>
-		public DateTime LastUpdateAt { get; set; }
+        /// <summary>
+        /// Дата обновления данных
+        /// </summary>
+        [JsonPropertyName("last_updated_at")]
+        public DateTime LastUpdatedAt { get; set; }
     }
 }
