@@ -52,6 +52,7 @@ builder.Services.Configure<CurrencyApiOptions>(builder
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<ICurrencyAPIService, CurrencyAPIService>();
 builder.Services.AddScoped<ICacheFileService, CacheFileService>();
+builder.Services.AddScoped<ICachedCurrencyAPIService, CachedCurrencyAPIService>();
 
 var app = builder.Build();
 
