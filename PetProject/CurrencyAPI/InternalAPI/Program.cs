@@ -1,14 +1,27 @@
+using InternalApi.Exceptions;
 using InternalApi.Services.CurrencyService;
 using InternalAPI.Models;
+using InternalAPI.Services.CachedCurrencyAPIService;
+using InternalAPI.Services.CacheFileService;
+using InternalAPI.Services.CurrencyAPIService;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+	options.Filters.Add<GlobalExceptionFilter>();
+})
+	.AddJsonOptions(options =>
+	{
+		options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+	});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -37,6 +50,7 @@ builder.Services.Configure<CurrencyApiOptions>(builder
 	.Configuration.GetSection("CurrencyAPIOptions"));
 
 builder.Services.AddScoped<ICurrencyService, CurrencyService>();
+builder.Services.AddScoped<ICurrencyAPIService, CurrencyAPIService>();
 
 var app = builder.Build();
 
