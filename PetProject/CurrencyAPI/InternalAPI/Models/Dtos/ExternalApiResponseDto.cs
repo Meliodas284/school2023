@@ -10,11 +10,13 @@ namespace InternalApi.Models.Dtos
         /// <summary>
         /// Метаданные
         /// </summary>
-        public MetaDto Meta { get; set; }
+        [JsonPropertyName("meta")]
+		public MetaDto Meta { get; set; }
 
         /// <summary>
         /// Данные ответа
         /// </summary>
+        [JsonPropertyName("data")]
         public Dictionary<string, Currency> Data { get; set; }
     }
 
