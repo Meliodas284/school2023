@@ -18,6 +18,6 @@
 		/// <summary>
 		/// Курс валюты
 		/// </summary>
-		public double Value { get; set; }
+		public decimal Value { get; set; }
 	}
 }

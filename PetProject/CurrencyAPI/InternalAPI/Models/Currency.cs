@@ -17,6 +17,6 @@ namespace InternalApi.Models
 		/// Курс валюты
 		/// </summary>
 		[JsonPropertyName("value")]
-		public double Value { get; set; }
+		public decimal Value { get; set; }
     }
 }

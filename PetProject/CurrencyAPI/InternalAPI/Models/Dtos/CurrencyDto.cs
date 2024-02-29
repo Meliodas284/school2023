@@ -4,7 +4,7 @@
 	{
 		public CurrencyType CurrencyType { get; set; }
 
-        public double Value { get; set; }
+        public decimal Value { get; set; }
     }
 
 	public enum CurrencyType
