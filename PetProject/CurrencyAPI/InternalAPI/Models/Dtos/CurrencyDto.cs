@@ -1,16 +1,38 @@
-﻿namespace InternalAPI.Models.Dtos
+﻿namespace InternalAPI.Models.Dtos;
+
+/// <summary>
+/// Представляет DTO с информацией о курсе валюты
+/// </summary>
+public class CurrencyDto
 {
-	public class CurrencyDto
-	{
-		public CurrencyType CurrencyType { get; set; }
+	/// <summary>
+	/// Тип валюты (код)
+	/// </summary>
+	public CurrencyType CurrencyType { get; set; }
 
-        public decimal Value { get; set; }
-    }
+	/// <summary>
+	/// Значение курса
+	/// </summary>
+    public decimal Value { get; set; }
+}
 
-	public enum CurrencyType
-	{
-		USD,
-		RUB,
-		KZT
-	}
+/// <summary>
+/// Представляет типы валют (коды)
+/// </summary>
+public enum CurrencyType
+{
+	/// <summary>
+	/// Доллар
+	/// </summary>
+	USD,
+
+	/// <summary>
+	/// Рубль
+	/// </summary>
+	RUB,
+
+	/// <summary>
+	/// Тенге
+	/// </summary>
+	KZT
 }

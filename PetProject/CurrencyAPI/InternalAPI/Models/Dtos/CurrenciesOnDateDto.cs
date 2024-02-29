@@ -1,12 +1,19 @@
 ﻿using InternalApi.Models;
 
-namespace InternalAPI.Models.Dtos
-{
-	// TODO: Комментарии к классу
-	public class CurrenciesOnDateDto
-	{
-        public DateTime LastUpdateAt { get; set; }
+namespace InternalAPI.Models.Dtos;
 
-        public Currency[] Currencies { get; set; }
-    }
+/// <summary>
+/// Представляет DTO валют на определенную дату
+/// </summary>
+public class CurrenciesOnDateDto
+{
+    /// <summary>
+    /// Дата курса для валют
+    /// </summary>
+    public DateTime LastUpdateAt { get; set; }
+
+	/// <summary>
+	/// Массив валют с курсом на определенную дату
+	/// </summary>
+	public Currency[] Currencies { get; set; }
 }
