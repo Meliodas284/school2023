@@ -34,7 +34,7 @@ namespace InternalApi.Exceptions
 					{
 						Status = 404,
 						Title = "Валюта не найдена",
-						Detail = "Валюты с таким кодом не существует"
+						Detail = "Код базовой или искомой валюты, или дата курса некорректны!"
 					};
 					break;
 				case ApiRequestLimitException:

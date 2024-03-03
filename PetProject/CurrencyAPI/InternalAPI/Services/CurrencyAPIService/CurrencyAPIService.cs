@@ -2,6 +2,7 @@
 using InternalApi.Models;
 using InternalApi.Models.Dtos;
 using InternalAPI.Models.Dtos;
+using System.Net;
 
 namespace InternalAPI.Services.CurrencyAPIService;
 
@@ -36,6 +37,9 @@ public class CurrencyAPIService : ICurrencyAPIService
 		var uri = $"historical?date={date.ToString("yyyy-MM-dd")}&base_currency={baseCurrency}";
 		var response = await client.GetAsync(uri, cancellationToken);
 
+		if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
+			throw new CurrencyNotFoundException();
+
 		return await ParseCurrenciesOnDate(response, cancellationToken);
 	}
 
@@ -52,6 +56,9 @@ public class CurrencyAPIService : ICurrencyAPIService
 		var client = _factory.CreateClient("currency");
 		var uri = $"latest?base_currency={baseCurrency}";
 		var response = await client.GetAsync(uri, cancellationToken);
+
+		if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
+			throw new CurrencyNotFoundException();
 
 		return await ParseCurrencies(response, cancellationToken);
 	}
