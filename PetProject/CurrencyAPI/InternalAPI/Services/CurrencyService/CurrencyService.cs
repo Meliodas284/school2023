@@ -25,8 +25,8 @@ namespace InternalApi.Services.CurrencyService;
 		IHttpClientFactory factory)
         {
             _options = options.Value;
-		_factory = factory;
-	}
+			_factory = factory;
+		}
 
 	/// <summary>
 	/// Получить курс валюты по умолчанию
