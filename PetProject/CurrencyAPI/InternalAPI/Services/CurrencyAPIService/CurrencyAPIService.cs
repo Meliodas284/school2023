@@ -29,16 +29,14 @@ public class CurrencyAPIService : ICurrencyAPIService
 	/// <param name="cancellationToken">Токен отмены</param>
 	/// <returns>Список курсов валют на дату</returns>
 	public async Task<CurrenciesOnDateDto> GetAllCurrenciesOnDateAsync(string baseCurrency, DateOnly date, CancellationToken cancellationToken)
-	{
-		cancellationToken.ThrowIfCancellationRequested();
-		
-		await CheckRequestsLimit();
+	{		
+		await CheckRequestsLimit(cancellationToken);
 
 		var client = _factory.CreateClient("currency");
 		var uri = $"historical?date={date.ToString("yyyy-MM-dd")}&base_currency={baseCurrency}";
 		var response = await client.GetAsync(uri, cancellationToken);
 
-		return await ParseCurrenciesOnDate(response);
+		return await ParseCurrenciesOnDate(response, cancellationToken);
 	}
 
 	/// <summary>
@@ -49,27 +47,26 @@ public class CurrencyAPIService : ICurrencyAPIService
 	/// <returns>Список курсов валют</returns>
 	public async Task<Currency[]> GetAllCurrentCurrenciesAsync(string baseCurrency, CancellationToken cancellationToken)
 	{
-		cancellationToken.ThrowIfCancellationRequested();
-
-		await CheckRequestsLimit();
+		await CheckRequestsLimit(cancellationToken);
 
 		var client = _factory.CreateClient("currency");
 		var uri = $"latest?base_currency={baseCurrency}";
 		var response = await client.GetAsync(uri, cancellationToken);
 
-		return await ParseCurrencies(response);
+		return await ParseCurrencies(response, cancellationToken);
 	}
 
 	/// <summary>
 	/// Проверяет превышение лимита запросов, вызывает исключение если превышен
 	/// </summary>
+	/// <param name="cancellationToken">Токен отмены</param>
 	/// <exception cref="ApiRequestLimitException">Исключение при превышении лимита</exception>
-	private async Task CheckRequestsLimit()
+	private async Task CheckRequestsLimit(CancellationToken cancellationToken)
 	{
 		var client = _factory.CreateClient("currency");
 
 		var accountStatus = await client
-			.GetFromJsonAsync<AccountStatusDto>("status");
+			.GetFromJsonAsync<AccountStatusDto>("status", cancellationToken);
 
 		if (accountStatus!.Quotas.Month.Remaining == 0)
 			throw new ApiRequestLimitException();
@@ -79,10 +76,11 @@ public class CurrencyAPIService : ICurrencyAPIService
 	/// Спарсить ответ в массив курсов
 	/// </summary>
 	/// <param name="response">Ответ внешнего API</param>
+	/// <param name="cancellationToken">Токен отмены</param>
 	/// <returns>Массив курсов валют</returns>
-	private async Task<Currency[]> ParseCurrencies(HttpResponseMessage response)
+	private async Task<Currency[]> ParseCurrencies(HttpResponseMessage response, CancellationToken cancellationToken)
 	{
-		var result = await response.Content.ReadFromJsonAsync<ExternalApiResponseDto>();
+		var result = await response.Content.ReadFromJsonAsync<ExternalApiResponseDto>(cancellationToken);
 		return result!.Data.Values.ToArray();
 	}
 
@@ -90,10 +88,11 @@ public class CurrencyAPIService : ICurrencyAPIService
 	/// Спарсить ответ в dto <see cref="CurrenciesOnDateDto"/>
 	/// </summary>
 	/// <param name="response">Ответ внешнего API</param>
+	/// <param name="cancellationToken">Токен отмены</param>
 	/// <returns>Dto <see cref="CurrenciesOnDateDto"/></returns>
-	private async Task<CurrenciesOnDateDto> ParseCurrenciesOnDate(HttpResponseMessage response)
+	private async Task<CurrenciesOnDateDto> ParseCurrenciesOnDate(HttpResponseMessage response, CancellationToken cancellationToken)
 	{
-		var result = await response.Content.ReadFromJsonAsync<ExternalApiResponseDto>();
+		var result = await response.Content.ReadFromJsonAsync<ExternalApiResponseDto>(cancellationToken);
 		return new CurrenciesOnDateDto
 		{
 			LastUpdateAt = result!.Meta.LastUpdatedAt,
