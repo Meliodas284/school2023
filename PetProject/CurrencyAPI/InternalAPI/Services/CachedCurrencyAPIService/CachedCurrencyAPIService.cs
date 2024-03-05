@@ -1,5 +1,7 @@
-﻿using InternalAPI.Models.Dtos;
+﻿using InternalAPI.Models;
+using InternalAPI.Models.Dtos;
 using InternalAPI.Services.CacheFileService;
+using Microsoft.Extensions.Options;
 
 namespace InternalAPI.Services.CachedCurrencyAPIService;
 
@@ -9,14 +11,19 @@ namespace InternalAPI.Services.CachedCurrencyAPIService;
 public class CachedCurrencyAPIService : ICachedCurrencyAPIService
 {
 	private readonly ICacheFileService _cachedFileService;
+	private readonly CurrencyApiOptions _options;
 
 	/// <summary>
 	/// Конструктор для инициализации зависимостей
 	/// </summary>
 	/// <param name="cachedFileService">Сервис для работы с кэшем</param>
-	public CachedCurrencyAPIService(ICacheFileService cachedFileService)
+	/// <param name="options">Конфигурация API</param>
+	public CachedCurrencyAPIService(
+		ICacheFileService cachedFileService, 
+		IOptionsSnapshot<CurrencyApiOptions> options)
 	{
 		_cachedFileService = cachedFileService;
+		_options = options.Value;
 	}
 
 	/// <summary>
@@ -32,7 +39,7 @@ public class CachedCurrencyAPIService : ICachedCurrencyAPIService
 		return new CurrencyDto
 		{
 			CurrencyType = currencyType,
-			Value = currency.Value
+			Value = Math.Round(currency.Value, _options.CurrencyRoundCount)
 		};
 	}
 
@@ -48,7 +55,7 @@ public class CachedCurrencyAPIService : ICachedCurrencyAPIService
 		return new CurrencyDto
 		{
 			CurrencyType = currencyType,
-			Value = currency.Value
+			Value = Math.Round(currency.Value, _options.CurrencyRoundCount)
 		};
 	}
 }
