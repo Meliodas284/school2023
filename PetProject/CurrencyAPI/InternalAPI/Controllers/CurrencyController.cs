@@ -1,9 +1,9 @@
-﻿using InternalApi.Models;
-using InternalApi.Models.Dtos;
-using InternalApi.Services.CurrencyService;
+﻿using InternalAPI.Models;
+using InternalAPI.Models.Dtos;
+using InternalAPI.Services.CurrencyService;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InternalApi.Controllers;
+namespace InternalAPI.Controllers;
 
 /// <summary>
 /// Методы для работы с валютами

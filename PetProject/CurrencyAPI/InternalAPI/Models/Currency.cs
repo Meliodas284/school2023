@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace InternalApi.Models
+namespace InternalAPI.Models
 {
 	/// <summary>
 	/// Класс представляющий валюту

@@ -1,7 +1,7 @@
-﻿using InternalApi.Models;
-using InternalApi.Models.Dtos;
+﻿using InternalAPI.Models;
+using InternalAPI.Models.Dtos;
 
-namespace InternalApi.Services.CurrencyService;
+namespace InternalAPI.Services.CurrencyService;
 
     /// <summary>
     /// Предоставляет методы для получения курса валют

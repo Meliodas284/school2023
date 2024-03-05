@@ -1,6 +1,4 @@
-﻿using InternalApi.Models;
-
-namespace InternalAPI.Models.Dtos;
+﻿namespace InternalAPI.Models.Dtos;
 
 /// <summary>
 /// Представляет DTO валют на определенную дату

@@ -1,6 +1,5 @@
-﻿using InternalApi.Exceptions;
-using InternalApi.Models;
-using InternalApi.Models.Dtos;
+﻿using InternalAPI.Exceptions;
+using InternalAPI.Models;
 using InternalAPI.Models.Dtos;
 using System.Net;
 

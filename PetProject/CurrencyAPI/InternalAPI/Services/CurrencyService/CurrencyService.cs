@@ -1,11 +1,10 @@
-﻿using InternalApi.Exceptions;
-using InternalApi.Models;
-using InternalApi.Models.Dtos;
+﻿using InternalAPI.Exceptions;
 using InternalAPI.Models;
+using InternalAPI.Models.Dtos;
 using Microsoft.Extensions.Options;
 using System.Net;
 
-namespace InternalApi.Services.CurrencyService;
+namespace InternalAPI.Services.CurrencyService;
 
     /// <summary>
     /// Сервис по получению курса валют

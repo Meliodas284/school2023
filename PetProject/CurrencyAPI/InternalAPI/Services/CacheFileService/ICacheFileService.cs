@@ -1,4 +1,4 @@
-﻿using InternalApi.Models;
+﻿using InternalAPI.Models;
 using InternalAPI.Models.Dtos;
 
 namespace InternalAPI.Services.CacheFileService;

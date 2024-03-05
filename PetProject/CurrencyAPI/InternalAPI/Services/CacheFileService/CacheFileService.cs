@@ -1,5 +1,4 @@
-﻿using InternalApi.Exceptions;
-using InternalApi.Models;
+﻿using InternalAPI.Exceptions;
 using InternalAPI.Models;
 using InternalAPI.Models.Dtos;
 using InternalAPI.Services.CurrencyAPIService;

@@ -1,5 +1,5 @@
-using InternalApi.Exceptions;
-using InternalApi.Services.CurrencyService;
+using InternalAPI.Exceptions;
+using InternalAPI.Services.CurrencyService;
 using InternalAPI.Models;
 using InternalAPI.Services.CachedCurrencyAPIService;
 using InternalAPI.Services.CacheFileService;

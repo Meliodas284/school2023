@@ -1,20 +1,19 @@
-﻿namespace InternalApi.Exceptions
+﻿namespace InternalAPI.Exceptions;
+
+/// <summary>
+/// Исключение при неизвестном коде валюты
+/// </summary>
+public class CurrencyNotFoundException : Exception
 {
 	/// <summary>
-	/// Исключение при неизвестном коде валюты
+	/// Конструктор по умолчанию
 	/// </summary>
-	public class CurrencyNotFoundException : Exception
-	{
-		/// <summary>
-		/// Конструктор по умолчанию
-		/// </summary>
-		public CurrencyNotFoundException() { }
+	public CurrencyNotFoundException() { }
 
-		/// <summary>
-		/// Конструктор с сообщением
-		/// </summary>
-		/// <param name="message">Сообщение ошибки</param>
-		public CurrencyNotFoundException(string message)
+	/// <summary>
+	/// Конструктор с сообщением
+	/// </summary>
+	/// <param name="message">Сообщение ошибки</param>
+	public CurrencyNotFoundException(string message)
             : base(message) { }
-    }
 }
