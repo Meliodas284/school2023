@@ -54,9 +54,10 @@ public class CurrencyController : ControllerBase
 	/// <returns>Информацию о валюте с нужным кодом
 	/// и на определенную дату<see cref="Currency"/></returns>
 	[HttpGet("{date:datetime}/{code:regex([[A-Z]]{{3}})}")]
-	public async Task<ActionResult<DateCurrencyDto>> GetCurrencyOnDate(DateOnly date, string code)
+	public async Task<ActionResult<DateCurrencyDto>> GetCurrencyOnDate(DateTime date, string code)
 	{
-		var result = await _currencyService.GetCurrencyOnDate(date, code);
+		var dateOnly = DateOnly.FromDateTime(date);
+		var result = await _currencyService.GetCurrencyOnDate(dateOnly, code);
 		return Ok(result);
 	}
 
