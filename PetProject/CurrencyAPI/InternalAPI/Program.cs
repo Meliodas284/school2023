@@ -1,5 +1,4 @@
 using InternalAPI.Exceptions;
-using InternalAPI.Services.CurrencyService;
 using InternalAPI.Models;
 using InternalAPI.Services.CachedCurrencyAPIService;
 using InternalAPI.Services.CacheFileService;
@@ -49,7 +48,6 @@ builder.Services.AddHttpClient("currency", client =>
 builder.Services.Configure<CurrencyApiOptions>(builder
 	.Configuration.GetSection("CurrencyAPIOptions"));
 
-builder.Services.AddScoped<ICurrencyService, CurrencyService>();
 builder.Services.AddScoped<ICurrencyAPIService, CurrencyAPIService>();
 builder.Services.AddScoped<ICacheFileService, CacheFileService>();
 builder.Services.AddScoped<ICachedCurrencyAPIService, CachedCurrencyAPIService>();
