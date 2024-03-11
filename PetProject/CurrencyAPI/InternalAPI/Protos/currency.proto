@@ -1,0 +1,32 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "InternalAPI";
+
+import "google/protobuf/timestamp.proto";
+
+package currency;
+
+service CurrencyService{
+	rpc Get(Request) returns (CurrencyResponse);
+	rpc GetOnDate(OnDateRequest) returns (CurrencyOnDateResponse);
+}
+
+message CurrencyResponse{
+	string code = 1;
+	double value = 2;
+}
+
+message CurrencyOnDateResponse{
+	string code = 1;
+	double value = 2;
+	google.protobuf.Timestamp date = 3;
+}
+
+message Request{
+	string code = 1;
+}
+
+message OnDateRequest{
+	string code = 1;
+	google.protobuf.Timestamp date = 2;
+}

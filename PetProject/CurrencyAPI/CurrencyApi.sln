@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionF
 		..\ReadMe.md = ..\ReadMe.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternalAPI", "InternalAPI\InternalAPI.csproj", "{32AA587C-FD35-4E6B-83C9-C80544AE61EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternalAPI", "InternalAPI\InternalAPI.csproj", "{32AA587C-FD35-4E6B-83C9-C80544AE61EF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,5 +29,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4EF519B4-9232-41B5-A043-605075E483AD}
 	EndGlobalSection
 EndGlobal
