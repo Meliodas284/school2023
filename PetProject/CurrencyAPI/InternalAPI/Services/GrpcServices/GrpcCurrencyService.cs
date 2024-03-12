@@ -1,7 +1,9 @@
-﻿using Grpc.Core;
+﻿using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
 using InternalAPI.Exceptions;
 using InternalAPI.Models.Dtos;
 using InternalAPI.Services.CachedCurrencyAPIService;
+using InternalAPI.Services.CurrencyAPIService;
 
 namespace InternalAPI.Services.GrpcServices;
 
@@ -11,14 +13,17 @@ namespace InternalAPI.Services.GrpcServices;
 public class GrpcCurrencyService : CurrencyService.CurrencyServiceBase
 {
 	private readonly ICachedCurrencyAPIService _currencyService;
+	private readonly ICurrencyAPIService _apiService;
 
 	/// <summary>
 	/// Конструктор, инициализирует зависимости
 	/// </summary>
 	/// <param name="currencyService">Сервис валют, использующий кэш</param>
-	public GrpcCurrencyService(ICachedCurrencyAPIService currencyService)
+	/// <param name="apiService">Сервис валют, использующий внешний API</param>
+	public GrpcCurrencyService(ICachedCurrencyAPIService currencyService, ICurrencyAPIService apiService)
     {
         _currencyService = currencyService;
+		_apiService = apiService;
 	}
 
 	/// <summary>
@@ -30,7 +35,7 @@ public class GrpcCurrencyService : CurrencyService.CurrencyServiceBase
 	/// <exception cref="CurrencyNotFoundException"></exception>
 	public override async Task<CurrencyResponse> Get(Request request, ServerCallContext context)
 	{
-		if (!Enum.TryParse(request.Code, out CurrencyType currencyCode))
+		if (!System.Enum.TryParse(request.Code, out CurrencyType currencyCode))
 		{
 			throw new CurrencyNotFoundException("Нет валюты с таким кодом!");
 		}
@@ -54,7 +59,7 @@ public class GrpcCurrencyService : CurrencyService.CurrencyServiceBase
 	/// <exception cref="CurrencyNotFoundException"></exception>
 	public override async Task<CurrencyOnDateResponse> GetOnDate(OnDateRequest request, ServerCallContext context)
 	{
-		if (!Enum.TryParse(request.Code, out CurrencyType currencyCode))
+		if (!System.Enum.TryParse(request.Code, out CurrencyType currencyCode))
 		{
 			throw new CurrencyNotFoundException("Нет валюты с таким кодом!");
 		}
@@ -69,6 +74,23 @@ public class GrpcCurrencyService : CurrencyService.CurrencyServiceBase
 			Code = request.Code,
 			Value = (double)result.Value,
 			Date = request.Date
+		};
+	}
+
+	/// <summary>
+	/// Получить настройки API
+	/// </summary>
+	/// <param name="request">Пустой параметр</param>
+	/// <param name="context">Контекст сервера</param>
+	/// <returns>Настройки API</returns>
+	public override async Task<Settings> GetSettings(Empty request, ServerCallContext context)
+	{
+		var result = await _apiService.GetApiSettingsAsync(context.CancellationToken);
+
+		return new Settings
+		{
+			BaseCurrency = result.BaseCurrency,
+			AvailableQueries = result.RequestCount <= result.RequestLimit
 		};
 	}
 }
