@@ -1,6 +1,7 @@
 ﻿using InternalAPI.Exceptions;
 using InternalAPI.Models;
 using InternalAPI.Models.Dtos;
+using Microsoft.Extensions.Options;
 using System.Net;
 
 namespace InternalAPI.Services.CurrencyAPIService;
@@ -11,14 +12,17 @@ namespace InternalAPI.Services.CurrencyAPIService;
 public class CurrencyAPIService : ICurrencyAPIService
 {
 	private readonly IHttpClientFactory _factory;
+	private readonly CurrencyApiOptions _options;
 
 	/// <summary>
 	/// Конструктор, инициализирует зависимости
 	/// </summary>
 	/// <param name="factory">Сервис для создания http клиента</param>
-	public CurrencyAPIService(IHttpClientFactory factory)
-        {
+	/// <param name="options">Настройки</param>
+	public CurrencyAPIService(IHttpClientFactory factory, IOptionsSnapshot<CurrencyApiOptions> options)
+    {
 		_factory = factory;
+		_options = options.Value;
 	}
 
 	/// <summary>
@@ -60,6 +64,28 @@ public class CurrencyAPIService : ICurrencyAPIService
 			throw new CurrencyNotFoundException();
 
 		return await ParseCurrencies(response, cancellationToken);
+	}
+
+	/// <summary>
+	/// Получить настройки API
+	/// </summary>
+	/// <param name="cancellationToken">Токен отмены</param>
+	/// <returns>Настройки API <see cref="ApiSettingsDto"/></returns>
+	public async Task<ApiSettingsDto> GetApiSettingsAsync(CancellationToken cancellationToken)
+	{
+		var client = _factory.CreateClient("currency");
+
+		var accountStatus = await client
+			.GetFromJsonAsync<AccountStatusDto>("status", cancellationToken);
+
+		return new ApiSettingsDto
+		{
+			DefaultCurrency = _options.DefaultCurrency,
+			BaseCurrency = _options.BaseCurrency,
+			RequestLimit = accountStatus!.Quotas.Month.Total,
+			RequestCount = accountStatus.Quotas.Month.Used,
+			CurrencyRoundCount = _options.CurrencyRoundCount
+		};
 	}
 
 	/// <summary>

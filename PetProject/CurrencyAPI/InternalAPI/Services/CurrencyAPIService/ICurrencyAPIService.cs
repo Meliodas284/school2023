@@ -24,4 +24,11 @@ public interface ICurrencyAPIService
 	/// <param name="cancellationToken">Токен отмены</param>
 	/// <returns>Список курсов валют на дату</returns>
 	Task<CurrenciesOnDateDto> GetAllCurrenciesOnDateAsync(string baseCurrency, DateOnly date, CancellationToken cancellationToken);
+
+	/// <summary>
+	/// Получить настройки API
+	/// </summary>
+	/// <param name="cancellationToken">Токен отмены</param>
+	/// <returns></returns>
+	Task<ApiSettingsDto> GetApiSettingsAsync(CancellationToken cancellationToken);
 }
