@@ -11,9 +11,9 @@ public class DateCurrencyDto
 	public DateOnly Date { get; set; }
 
     /// <summary>
-    /// Код валюты
+    /// Тип валюты (код)
     /// </summary>
-    public string Code { get; set; }
+    public CurrencyType Code { get; set; }
 
 	/// <summary>
 	/// Курс валюты
