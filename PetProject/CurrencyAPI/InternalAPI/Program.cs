@@ -45,8 +45,8 @@ builder.Services.AddHttpClient("currency", client =>
 	client.BaseAddress = new Uri(builder.Configuration["CurrencyAPIOptions:BaseUrl"]!);
 });
 
-builder.Services.Configure<CurrencyApiOptions>(builder
-	.Configuration.GetSection("CurrencyAPIOptions"));
+builder.Services.Configure<CurrencyApiOptions>(builder.Configuration
+	.GetSection("CurrencyAPIOptions"));
 
 builder.Services.AddScoped<ICurrencyAPIService, CurrencyAPIService>();
 builder.Services.AddScoped<ICacheFileService, CacheFileService>();
