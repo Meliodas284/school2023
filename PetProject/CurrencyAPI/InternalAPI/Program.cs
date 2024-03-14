@@ -3,6 +3,8 @@ using InternalAPI.Models;
 using InternalAPI.Services.CachedCurrencyAPIService;
 using InternalAPI.Services.CacheFileService;
 using InternalAPI.Services.CurrencyAPIService;
+using InternalAPI.Services.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
@@ -48,6 +50,9 @@ builder.Services.AddHttpClient("currency", client =>
 builder.Services.Configure<CurrencyApiOptions>(builder.Configuration
 	.GetSection("CurrencyAPIOptions"));
 
+builder.Services.AddHealthChecks()
+	.AddCheck<CurrencyHealthCheck>("custom-currency", HealthStatus.Unhealthy);
+
 builder.Services.AddScoped<ICurrencyAPIService, CurrencyAPIService>();
 builder.Services.AddScoped<ICacheFileService, CacheFileService>();
 builder.Services.AddScoped<ICachedCurrencyAPIService, CachedCurrencyAPIService>();
@@ -62,6 +67,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapHealthChecks("/health");
 
 app.UseSerilogRequestLogging();
 

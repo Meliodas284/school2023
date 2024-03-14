@@ -1,0 +1,46 @@
+﻿using InternalAPI.Exceptions;
+using InternalAPI.Services.CurrencyAPIService;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+
+namespace InternalAPI.Services.HealthChecks
+{
+	/// <summary>
+	/// Реализует HealthCheck для проверки доступности API
+	/// </summary>
+	public class CurrencyHealthCheck : IHealthCheck
+	{
+		private readonly ICurrencyAPIService _apiService;
+
+        /// <summary>
+		/// Конструктор
+		/// </summary>
+		/// <param name="apiService">Сервис API</param>
+		public CurrencyHealthCheck(ICurrencyAPIService apiService)
+        {
+			_apiService = apiService;
+		}
+
+		/// <summary>
+		/// Метод для проверки доступности API
+		/// </summary>
+		/// <param name="context">Контекст</param>
+		/// <param name="token">Токен отмены</param>
+		/// <returns>api доступно: Healthy; api не доступно: Unhealthy</returns>
+		/// <exception cref="ApiRequestLimitException">При превышении лимита запросов к API</exception>
+		public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken token = default)
+		{
+			try
+			{
+				var settings = await _apiService.GetApiSettingsAsync(token);
+				if (settings.RequestCount >= settings.RequestLimit)
+					throw new ApiRequestLimitException("Превышен лимит запросов к API");
+
+				return HealthCheckResult.Healthy();
+			}
+			catch (Exception ex) 
+			{ 
+				return HealthCheckResult.Unhealthy(ex.Message);
+			}
+		}
+	}
+}
