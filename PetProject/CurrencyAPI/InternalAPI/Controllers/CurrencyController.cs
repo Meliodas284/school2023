@@ -12,8 +12,8 @@ namespace InternalAPI.Controllers
 	[ApiController]
 	public class CurrencyController : ControllerBase
 	{
-		private readonly ICachedCurrencyAPIService _currencyCacheService;
-		private readonly ICurrencyAPIService _currencyService;
+		private readonly ICacheCurrencyService _currencyCacheService;
+		private readonly ICurrencyApiService _currencyService;
 
         /// <summary>
 		/// Конструктор, инициализирует зависимости
@@ -21,8 +21,8 @@ namespace InternalAPI.Controllers
 		/// <param name="currencyCacheService">Сервис валют с использованием кэша</param>
 		/// <param name="currencyService">Сервис валют с использованием внешнего API</param>
 		public CurrencyController(
-			ICachedCurrencyAPIService currencyCacheService, 
-			ICurrencyAPIService currencyService)
+			ICacheCurrencyService currencyCacheService, 
+			ICurrencyApiService currencyService)
         {
 			_currencyCacheService = currencyCacheService;
 			_currencyService = currencyService;

@@ -3,7 +3,7 @@
 /// <summary>
 /// Представляет конфигурацию api через паттерн IOptions
 /// </summary>
-public class CurrencyApiOptions
+public class CurrencyOptions
 {
 	/// <summary>
 	/// Базовый адрес запроса

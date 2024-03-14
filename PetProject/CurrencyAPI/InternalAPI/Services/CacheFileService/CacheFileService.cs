@@ -14,8 +14,8 @@ namespace InternalAPI.Services.CacheFileService;
 public class CacheFileService : ICacheFileService
 {
 	private const string DirectoryPath = "Cache";
-	private readonly ICurrencyAPIService _currencyApiService;
-	private readonly CurrencyApiOptions _options;
+	private readonly ICurrencyApiService _currencyApiService;
+	private readonly CurrencyOptions _options;
 
         /// <summary>
 	/// Конструктор для инициализации зависимостей
@@ -23,8 +23,8 @@ public class CacheFileService : ICacheFileService
 	/// <param name="options">Конфигурация</param>
 	/// <param name="currencyAPIService">Сервис для работы с внешним API</param>
 	public CacheFileService(
-		IOptionsSnapshot<CurrencyApiOptions> options, 
-		ICurrencyAPIService currencyAPIService)
+		IOptionsSnapshot<CurrencyOptions> options, 
+		ICurrencyApiService currencyAPIService)
         {
 		_options = options.Value;
 		_currencyApiService = currencyAPIService;

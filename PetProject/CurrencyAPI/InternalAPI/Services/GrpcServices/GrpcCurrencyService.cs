@@ -12,15 +12,15 @@ namespace InternalAPI.Services.GrpcServices;
 /// </summary>
 public class GrpcCurrencyService : CurrencyService.CurrencyServiceBase
 {
-	private readonly ICachedCurrencyAPIService _currencyService;
-	private readonly ICurrencyAPIService _apiService;
+	private readonly ICacheCurrencyService _currencyService;
+	private readonly ICurrencyApiService _apiService;
 
 	/// <summary>
 	/// Конструктор, инициализирует зависимости
 	/// </summary>
 	/// <param name="currencyService">Сервис валют, использующий кэш</param>
 	/// <param name="apiService">Сервис валют, использующий внешний API</param>
-	public GrpcCurrencyService(ICachedCurrencyAPIService currencyService, ICurrencyAPIService apiService)
+	public GrpcCurrencyService(ICacheCurrencyService currencyService, ICurrencyApiService apiService)
     {
         _currencyService = currencyService;
 		_apiService = apiService;

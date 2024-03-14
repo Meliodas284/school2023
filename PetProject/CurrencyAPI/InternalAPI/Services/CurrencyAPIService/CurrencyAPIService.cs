@@ -9,17 +9,17 @@ namespace InternalAPI.Services.CurrencyAPIService;
 /// <summary>
 /// Реализует логику получения курса для всех валют
 /// </summary>
-public class CurrencyAPIService : ICurrencyAPIService
+public class CurrencyApiService : ICurrencyApiService
 {
 	private readonly IHttpClientFactory _factory;
-	private readonly CurrencyApiOptions _options;
+	private readonly CurrencyOptions _options;
 
 	/// <summary>
 	/// Конструктор, инициализирует зависимости
 	/// </summary>
 	/// <param name="factory">Сервис для создания http клиента</param>
 	/// <param name="options">Настройки</param>
-	public CurrencyAPIService(IHttpClientFactory factory, IOptionsSnapshot<CurrencyApiOptions> options)
+	public CurrencyApiService(IHttpClientFactory factory, IOptionsSnapshot<CurrencyOptions> options)
     {
 		_factory = factory;
 		_options = options.Value;

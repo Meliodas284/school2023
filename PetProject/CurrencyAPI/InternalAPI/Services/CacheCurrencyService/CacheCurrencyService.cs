@@ -8,19 +8,19 @@ namespace InternalAPI.Services.CachedCurrencyAPIService;
 /// <summary>
 /// Реализует методы получения всех валют с использованием кэша
 /// </summary>
-public class CachedCurrencyAPIService : ICachedCurrencyAPIService
+public class CacheCurrencyService : ICacheCurrencyService
 {
 	private readonly ICacheFileService _cachedFileService;
-	private readonly CurrencyApiOptions _options;
+	private readonly CurrencyOptions _options;
 
 	/// <summary>
 	/// Конструктор для инициализации зависимостей
 	/// </summary>
 	/// <param name="cachedFileService">Сервис для работы с кэшем</param>
 	/// <param name="options">Конфигурация API</param>
-	public CachedCurrencyAPIService(
+	public CacheCurrencyService(
 		ICacheFileService cachedFileService, 
-		IOptionsSnapshot<CurrencyApiOptions> options)
+		IOptionsSnapshot<CurrencyOptions> options)
 	{
 		_cachedFileService = cachedFileService;
 		_options = options.Value;

@@ -5,7 +5,7 @@ namespace InternalAPI.Services.CachedCurrencyAPIService;
 /// <summary>
 /// Предоставляет методы получения курса валют с использованием кэша
 /// </summary>
-public interface ICachedCurrencyAPIService
+public interface ICacheCurrencyService
 {
 	/// <summary>
 	/// Получает текущий курс валюты с использованием кэша

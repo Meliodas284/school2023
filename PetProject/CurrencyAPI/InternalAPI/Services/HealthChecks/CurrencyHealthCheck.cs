@@ -9,13 +9,13 @@ namespace InternalAPI.Services.HealthChecks
 	/// </summary>
 	public class CurrencyHealthCheck : IHealthCheck
 	{
-		private readonly ICurrencyAPIService _apiService;
+		private readonly ICurrencyApiService _apiService;
 
         /// <summary>
 		/// Конструктор
 		/// </summary>
 		/// <param name="apiService">Сервис API</param>
-		public CurrencyHealthCheck(ICurrencyAPIService apiService)
+		public CurrencyHealthCheck(ICurrencyApiService apiService)
         {
 			_apiService = apiService;
 		}

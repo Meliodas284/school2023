@@ -6,7 +6,7 @@ namespace InternalAPI.Services.CurrencyAPIService;
 /// <summary>
 /// Предоставляет методы получения курса всех валют
 /// </summary>
-public interface ICurrencyAPIService
+public interface ICurrencyApiService
 {
 	/// <summary>
 	/// Получить текущий курс для всех валют

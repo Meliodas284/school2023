@@ -47,15 +47,15 @@ builder.Services.AddHttpClient("currency", client =>
 	client.BaseAddress = new Uri(builder.Configuration["CurrencyAPIOptions:BaseUrl"]!);
 });
 
-builder.Services.Configure<CurrencyApiOptions>(builder.Configuration
+builder.Services.Configure<CurrencyOptions>(builder.Configuration
 	.GetSection("CurrencyAPIOptions"));
 
 builder.Services.AddHealthChecks()
 	.AddCheck<CurrencyHealthCheck>("custom-currency", HealthStatus.Unhealthy);
 
-builder.Services.AddScoped<ICurrencyAPIService, CurrencyAPIService>();
+builder.Services.AddScoped<ICurrencyApiService, CurrencyApiService>();
 builder.Services.AddScoped<ICacheFileService, CacheFileService>();
-builder.Services.AddScoped<ICachedCurrencyAPIService, CachedCurrencyAPIService>();
+builder.Services.AddScoped<ICacheCurrencyService, CacheCurrencyService>();
 
 var app = builder.Build();
 
