@@ -1,8 +1,10 @@
 using InternalAPI.Exceptions;
+using InternalAPI.Interseptors;
 using InternalAPI.Models;
 using InternalAPI.Services.CachedCurrencyAPIService;
 using InternalAPI.Services.CacheFileService;
 using InternalAPI.Services.CurrencyAPIService;
+using InternalAPI.Services.GrpcServices;
 using InternalAPI.Services.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
@@ -53,6 +55,11 @@ builder.Services.Configure<CurrencyOptions>(builder.Configuration
 builder.Services.AddHealthChecks()
 	.AddCheck<CurrencyHealthCheck>("custom-currency", HealthStatus.Unhealthy);
 
+builder.Services.AddGrpc(options =>
+{
+	options.Interceptors.Add<ServerLoggerInterceptor>();
+});
+
 builder.Services.AddScoped<ICurrencyApiService, CurrencyApiService>();
 builder.Services.AddScoped<ICacheFileService, CacheFileService>();
 builder.Services.AddScoped<ICacheCurrencyService, CacheCurrencyService>();
@@ -66,9 +73,10 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
 app.MapHealthChecks("/health");
+
+app.MapGrpcService<GrpcCurrencyService>()
+	.RequireHost($"*:{builder.Configuration.GetValue<int>("GrpcPort")}");
 
 app.UseSerilogRequestLogging();
 
