@@ -30,7 +30,7 @@ public class CacheFileService : ICacheFileService
 		_currencyApiService = currencyAPIService;
         }
 
-        /// <summary>
+    /// <summary>
 	/// Получает курс валюты по заданному типу из файла кэша.
 	/// Если нужного файла кэша нет, обращается к внешнему API и сохраняет кэш.
 	/// </summary>
