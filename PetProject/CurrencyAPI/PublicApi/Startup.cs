@@ -67,19 +67,22 @@ public class Startup
 		Audit.Core.Configuration.Setup()
 			.UseSerilog();
 
-		services.AddHttpClient("currency", client =>
-		{
-			client.DefaultRequestHeaders.Add("apikey", _configuration["API-KEY"]);
-			client.BaseAddress = new Uri(_configuration["CurrencyAPIOptions:BaseUrl"]!);
-		})
-		.AddAuditHandler(audit => audit
-			.IncludeRequestBody()
-			.IncludeRequestHeaders()
-			.IncludeContentHeaders()
-			.IncludeResponseHeaders()
-			.IncludeResponseBody());
-
 		services.Configure<CurrencyApiOptions>(_configuration.GetSection("CurrencyAPIOptions"));
+
+		services.AddGrpcClient<PublicAPI.CurrencyService.CurrencyServiceClient>(options =>
+		{
+			var uriString = _configuration.GetValue<string>("GrpcUrl");
+			if (uriString != null)
+			{
+				options.Address = new Uri(uriString);
+			}
+		})
+			.AddAuditHandler(audit => audit
+			.IncludeRequestHeaders()
+			.IncludeRequestBody()
+			.IncludeResponseHeaders()
+			.IncludeResponseBody()
+			.IncludeContentHeaders());
 
 		services.AddScoped<ICurrencyService, CurrencyService>();
 	}

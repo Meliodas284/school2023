@@ -15,15 +15,10 @@
         /// </summary>
         public string BaseCurrency { get; set; }
 
-        /// <summary>
-        /// Лимит запросов
-        /// </summary>
-        public int RequestLimit { get; set; }
-
-        /// <summary>
-        /// Использовано запросов
-        /// </summary>
-        public int RequestCount { get; set; }
+		/// <summary>
+		/// Есть ли еще доступные запросы
+		/// </summary>
+		public bool NewRequestAvailable { get; set; }
 
         /// <summary>
         /// Количество знаков после запятой у курса

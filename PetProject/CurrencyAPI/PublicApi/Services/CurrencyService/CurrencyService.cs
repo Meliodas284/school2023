@@ -1,8 +1,10 @@
 ﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Exceptions;
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
 using Fuse8_ByteMinds.SummerSchool.PublicApi.Models.Dtos;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Net.Client;
 using Microsoft.Extensions.Options;
-using System.Net;
+using static PublicAPI.CurrencyService;
 
 namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 {
@@ -12,19 +14,19 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
     public class CurrencyService : ICurrencyService
 	{
 		private readonly CurrencyApiOptions _options;
-		private readonly IHttpClientFactory _factory;
+		private readonly CurrencyServiceClient _currencyServiceClient;
 
-        /// <summary>
+		/// <summary>
 		/// Конструктор, инициализирует зависимости
 		/// </summary>
 		/// <param name="options">Конфигурация api</param>
-		/// <param name="factory">Сервис для создания http клиента</param>
+		/// <param name="currencyServiceClient">Сервис клиента gRPC</param>
 		public CurrencyService(
 			IOptionsSnapshot<CurrencyApiOptions> options, 
-			IHttpClientFactory factory)
+			CurrencyServiceClient currencyServiceClient)
         {
             _options = options.Value;
-			_factory = factory;
+			_currencyServiceClient = currencyServiceClient;
 		}
 
 		/// <summary>
@@ -36,15 +38,17 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		{
 			await CheckRequestsLimit();
 
-			var client = _factory.CreateClient("currency");
-			var uri = $"latest?currencies={_options.DefaultCurrency}&base_currency={_options.BaseCurrency}";
+			var request = new PublicAPI.Request
+			{
+				Code = _options.DefaultCurrency
+			};
+			var response = await _currencyServiceClient.GetAsync(request);
 
-			var response = await client.GetAsync(uri);
-
-			if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
-				throw new CurrencyNotFoundException();
-
-			return await ParseCurrency(response, _options.DefaultCurrency);
+			return new Currency
+			{
+				Code = response.Code,
+				Value = response.Value
+			};
 		}
 
 		/// <summary>
@@ -56,16 +60,18 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		public async Task<Currency> GetCurrencyByCode(string code)
 		{
 			await CheckRequestsLimit();
-			
-			var client = _factory.CreateClient("currency");
-			var uri = $"latest?currencies={code}&base_currency={_options.BaseCurrency}";
 
-			var response = await client.GetAsync(uri);
+			var request = new PublicAPI.Request
+			{
+				Code = code
+			};
+			var response = await _currencyServiceClient.GetAsync(request);
 
-			if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
-				throw new CurrencyNotFoundException();
-
-			return await ParseCurrency(response, code);
+			return new Currency
+			{
+				Code = response.Code,
+				Value = response.Value
+			};
 		}
 
 		/// <summary>
@@ -79,22 +85,21 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		public async Task<DateCurrencyDto> GetCurrencyOnDate(DateOnly date, string code)
 		{
 			await CheckRequestsLimit();
-			
-			var client = _factory.CreateClient("currency");
-			var uri = $"historical?currencies={code}&date={date.ToString("yyyy-MM-dd")}&base_currency={_options.BaseCurrency}";
 
-			var response = await client.GetAsync(uri);
+			var datetime = date.ToDateTime(TimeOnly.MinValue).ToUniversalTime();
 
-			if (response.StatusCode == HttpStatusCode.UnprocessableEntity)
-				throw new CurrencyNotFoundException();
-
-			var currency = await ParseCurrency(response, code);
-
-			return new DateCurrencyDto 
+			var request = new PublicAPI.OnDateRequest
 			{
-				Code = currency.Code, 
-				Value = currency.Value, 
-				Date = date 
+				Code = code,
+				Date = Timestamp.FromDateTime(datetime)
+			};
+			var response = await _currencyServiceClient.GetOnDateAsync(request);
+
+			return new DateCurrencyDto
+			{
+				Code = code,
+				Date = date,
+				Value = response.Value
 			};
 		}
 
@@ -104,17 +109,13 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// <returns>Информацию о настройках API</returns>
 		public async Task<ApiSettingsDto> GetSettings()
 		{
-			var client = _factory.CreateClient("currency");
-
-			var accountStatus = await client
-				.GetFromJsonAsync<AccountStatusDto>("status");
+			var settings = await _currencyServiceClient.GetSettingsAsync(new Empty());
 
 			return new ApiSettingsDto
 			{
 				DefaultCurrency = _options.DefaultCurrency,
-				BaseCurrency = _options.BaseCurrency,
-				RequestLimit = accountStatus!.Quotas.Month.Total,
-				RequestCount = accountStatus.Quotas.Month.Used,
+				BaseCurrency = settings.BaseCurrency,
+				NewRequestAvailable = settings.AvailableQueries,
 				CurrencyRoundCount = _options.CurrencyRoundCount
 			};
 		}
@@ -125,28 +126,10 @@ namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService
 		/// <exception cref="ApiRequestLimitException">Исключение при превышении лимита</exception>
 		private async Task CheckRequestsLimit()
 		{
-			var client = _factory.CreateClient("currency");
+			var settings = await _currencyServiceClient.GetSettingsAsync(new Empty());
 
-			var accountStatus = await client
-				.GetFromJsonAsync<AccountStatusDto>("status");
-
-			if (accountStatus!.Quotas.Month.Remaining == 0)
+			if (!settings.AvailableQueries)
 				throw new ApiRequestLimitException();
-		}
-
-		/// <summary>
-		/// Получает нужную валюту из ответа внешнего API по коду
-		/// </summary>
-		/// <param name="response">Ответ внешнего API</param>
-		/// <param name="code">Код нужной валюты</param>
-		/// <returns>Нужная валюта с кодом <see cref="Currency.Code"/></returns>
-		private async Task<Currency> ParseCurrency(HttpResponseMessage response, string code)
-		{
-			var result = await response.Content.ReadFromJsonAsync<ExternalApiResponseDto>();
-			var currency = result!.Data[code];
-			currency.Value = Math.Round(currency.Value, _options.CurrencyRoundCount);
-
-			return currency;
 		}
 	}
 }
