@@ -1,16 +1,11 @@
-using InternalAPI.Exceptions;
-using InternalAPI.Interseptors;
-using InternalAPI.Models;
-using InternalAPI.Services.CachedCurrencyAPIService;
-using InternalAPI.Services.CacheFileService;
-using InternalAPI.Services.CurrencyAPIService;
-using InternalAPI.Services.GrpcServices;
-using InternalAPI.Services.HealthChecks;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using InternalApi.Api.Filters;
+using InternalApi.Domain.Settings;
 using Microsoft.OpenApi.Models;
+using InternalApi.Application.DependencyInjection;
 using Serilog;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using InternalApi.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,17 +44,7 @@ builder.Services.AddHttpClient("currency", client =>
 builder.Services.Configure<CurrencyOptions>(builder.Configuration
 	.GetSection("CurrencyAPIOptions"));
 
-builder.Services.AddHealthChecks()
-	.AddCheck<CurrencyHealthCheck>("custom-currency", HealthStatus.Unhealthy);
-
-builder.Services.AddGrpc(options =>
-{
-	options.Interceptors.Add<ServerLoggerInterceptor>();
-});
-
-builder.Services.AddScoped<ICurrencyApiService, CurrencyApiService>();
-builder.Services.AddScoped<ICacheFileService, CacheFileService>();
-builder.Services.AddScoped<ICacheCurrencyService, CacheCurrencyService>();
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
