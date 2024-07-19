@@ -1,9 +1,10 @@
 ﻿using Audit.Core;
 using Audit.Http;
-using Fuse8_ByteMinds.SummerSchool.PublicApi.Exceptions;
-using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
-using Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService;
 using Microsoft.OpenApi.Models;
+using PublicApi.Api.Filters;
+using PublicApi.Application.DependencyInjection;
+using PublicApi.Application.Proto;
+using PublicApi.Domain.Settings;
 using Serilog;
 using System.Reflection;
 using System.Text.Json.Serialization;
@@ -69,7 +70,7 @@ public class Startup
 
 		services.Configure<CurrencyApiOptions>(_configuration.GetSection("CurrencyAPIOptions"));
 
-		services.AddGrpcClient<PublicAPI.CurrencyService.CurrencyServiceClient>(options =>
+		services.AddGrpcClient<CurrencyService.CurrencyServiceClient>(options =>
 		{
 			var uriString = _configuration.GetValue<string>("GrpcUrl");
 			if (uriString != null)
@@ -84,7 +85,7 @@ public class Startup
 			.IncludeResponseBody()
 			.IncludeContentHeaders());
 
-		services.AddScoped<ICurrencyService, CurrencyService>();
+		services.AddApplication();
 	}
 
 	/// <summary>

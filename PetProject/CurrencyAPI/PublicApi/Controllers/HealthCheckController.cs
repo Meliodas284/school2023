@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using static Fuse8_ByteMinds.SummerSchool.PublicApi.Controllers.HealthCheckResult;
+using static PublicApi.Api.Controllers.HealthCheckResult;
 
-namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Controllers;
+namespace PublicApi.Api.Controllers;
 
 /// <summary>
 /// Методы для проверки работоспособности PublicApi

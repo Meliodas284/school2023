@@ -1,9 +1,9 @@
-﻿using Fuse8_ByteMinds.SummerSchool.PublicApi.Models;
-using Fuse8_ByteMinds.SummerSchool.PublicApi.Models.Dtos;
-using Fuse8_ByteMinds.SummerSchool.PublicApi.Services.CurrencyService;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using PublicApi.Domain.Dto;
+using PublicApi.Domain.Entity;
+using PublicApi.Domain.Interfaces.Services;
 
-namespace Fuse8_ByteMinds.SummerSchool.PublicApi.Controllers;
+namespace PublicApi.Api.Controllers;
 
 /// <summary>
 /// Методы для работы с валютами

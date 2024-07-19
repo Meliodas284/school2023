@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "PublicAPI";
+option csharp_namespace = "PublicApi.Application.Proto";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/empty.proto";
