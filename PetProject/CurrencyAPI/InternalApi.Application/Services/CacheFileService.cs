@@ -14,11 +14,11 @@ namespace InternalApi.Application.Services;
 /// </summary>
 public class CacheFileService : ICacheFileService
 {
-	private const string DirectoryPath = "Cache";
+	private string _directoryPath;
 	private readonly ICurrencyApiService _currencyApiService;
 	private readonly CurrencyOptions _options;
 
-        /// <summary>
+    /// <summary>
 	/// Конструктор для инициализации зависимостей
 	/// </summary>
 	/// <param name="options">Конфигурация</param>
@@ -29,6 +29,7 @@ public class CacheFileService : ICacheFileService
         {
 		_options = options.Value;
 		_currencyApiService = currencyAPIService;
+		_directoryPath = GetCacheDirectoryPath();
         }
 
     /// <summary>
@@ -41,14 +42,14 @@ public class CacheFileService : ICacheFileService
 	/// <exception cref="CurrencyNotFoundException">Если не найдена валюта заданного типа</exception>
 	public async Task<Currency> GetCurrency(CurrencyType type, CancellationToken cancellationToken)
 	{
-		var files = GetCachedFiles(DirectoryPath);
+		var files = GetCachedFiles(_directoryPath);
 		var data = files != null ? await GetRecentCache(files, cancellationToken) : null;
 
 		if (data == null)
 		{
 			data = await GetFromApi(cancellationToken);
 			var dateNow = DateTime.UtcNow.ToString("yyyy-MM-ddTHH-mm-ssZ");
-			await SaveCacheJsonAsync($"{DirectoryPath}/{dateNow}.json", data, cancellationToken);
+			await SaveCacheJsonAsync($"{_directoryPath}/{dateNow}.json", data, cancellationToken);
 		}
 
 		var currency = data.FirstOrDefault(c => c.Code == type.ToString());
@@ -69,7 +70,7 @@ public class CacheFileService : ICacheFileService
 	/// <exception cref="CurrencyNotFoundException">Если не найдена валюта заданного типа</exception>
 	public async Task<Currency> GetCurrencyOnDate(CurrencyType type, DateOnly date, CancellationToken cancellationToken)
 	{		
-		var files = GetCachedFiles(DirectoryPath);
+		var files = GetCachedFiles(_directoryPath);
 		var data = files != null ? await GetCacheOnDate(files, date, cancellationToken) : null;
 
 		if (data == null)
@@ -77,7 +78,7 @@ public class CacheFileService : ICacheFileService
 			var response = await GetFromApiOnDate(date, cancellationToken);
 			var fileDate = response.Item1.ToString("yyyy-MM-ddTHH-mm-ssZ");
 			data = response.Item2;
-			await SaveCacheJsonAsync($"{DirectoryPath}/{fileDate}.json", data, cancellationToken);
+			await SaveCacheJsonAsync($"{_directoryPath}/{fileDate}.json", data, cancellationToken);
 		}
 
 		var currency = data.FirstOrDefault(c => c.Code == type.ToString());
@@ -98,7 +99,7 @@ public class CacheFileService : ICacheFileService
 	{		
 		var directory = new DirectoryInfo(directoryPath);
 		if (!directory.Exists)
-			throw new DirectoryNotFoundException("Не найдена директория кэша");
+			directory.Create();
 
 		var files = directory.GetFiles("*.json");
 		if (files.Length == 0)
@@ -225,4 +226,10 @@ public class CacheFileService : ICacheFileService
 			await JsonSerializer.SerializeAsync(stream, data, cancellationToken: cancellationToken);
 		}
 	}
+
+	/// <summary>
+	/// Возвращает полный путь до директории с кэшем
+	/// </summary>
+	private string GetCacheDirectoryPath() =>
+		Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache");
 }

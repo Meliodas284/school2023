@@ -23,8 +23,4 @@
 		<Protobuf Include="Protos\currency.proto" GrpcServices="Server" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Cache\" />
-	</ItemGroup>
-
 </Project>
