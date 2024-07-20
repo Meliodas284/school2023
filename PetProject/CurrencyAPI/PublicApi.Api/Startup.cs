@@ -9,7 +9,7 @@ using Serilog;
 using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace Fuse8_ByteMinds.SummerSchool.PublicApi;
+namespace PublicApi.Api;
 
 /// <summary>
 /// Класс настраивает конфигурацию приложения
